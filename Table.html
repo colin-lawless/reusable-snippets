@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Data Table</title>
+    <style>
+        .table-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            font-family: Arial, sans-serif;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        @media screen and (max-width: 600px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+
+            tr {
+                margin-bottom: 15px;
+            }
+
+            td {
+                border: none;
+                position: relative;
+                padding-left: 50%;
+            }
+
+            td:before {
+                content: attr(data-label);
+                position: absolute;
+                left: 6px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                font-weight: bold;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Country</th>
+                    <th>Occupation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-label="Name">John Doe</td>
+                    <td data-label="Age">30</td>
+                    <td data-label="Country">USA</td>
+                    <td data-label="Occupation">Developer</td>
+                </tr>
+                <tr>
+                    <td data-label="Name">Jane Smith</td>
+                    <td data-label="Age">28</td>
+                    <td data-label="Country">Canada</td>
+                    <td data-label="Occupation">Designer</td>
+                </tr>
+                <tr>
+                    <td data-label="Name">Bob Johnson</td>
+                    <td data-label="Age">35</td>
+                    <td data-label="Country">UK</td>
+                    <td data-label="Occupation">Manager</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

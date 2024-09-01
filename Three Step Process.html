@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three-Step Process Template</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .process-steps {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .step {
+            flex-basis: calc(33.333% - 20px);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .step-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .step h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .step p {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        .step a {
+            display: inline-block;
+            text-decoration: none;
+            color: #000;
+            font-weight: bold;
+        }
+        .step a::after {
+            content: " >";
+        }
+        @media (max-width: 768px) {
+            .step {
+                flex-basis: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Discover Our Simple Three-Step Process</h1>
+        <div class="process-steps">
+            <div class="step">
+                <div class="step-icon">&#9633;</div>
+                <h2>Step 1: Getting Started</h2>
+                <p>Description of the first step in the process.</p>
+                <a href="#">Learn More</a>
+            </div>
+            <div class="step">
+                <div class="step-icon">&#9633;</div>
+                <h2>Step 2: Taking Action</h2>
+                <p>Description of the second step in the process.</p>
+                <a href="#">Next Step</a>
+            </div>
+            <div class="step">
+                <div class="step-icon">&#9633;</div>
+                <h2>Step 3: Achieving Results</h2>
+                <p>Description of the final step in the process.</p>
+                <a href="#">Finish</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Add any necessary JavaScript here
+        // For this example, no JavaScript is required
+    </script>
+</body>
+</html>

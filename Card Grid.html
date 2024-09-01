@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Card Grid</title>
+    <style>
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .card-description {
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="card-grid">
+        <div class="card">
+            <img src="/api/placeholder/400/200" alt="Card image" class="card-image">
+            <div class="card-content">
+                <h3 class="card-title">Card Title 1</h3>
+                <p class="card-description">This is a brief description of the card content.</p>
+            </div>
+        </div>
+        <div class="card">
+            <img src="/api/placeholder/400/200" alt="Card image" class="card-image">
+            <div class="card-content">
+                <h3 class="card-title">Card Title 2</h3>
+                <p class="card-description">This is a brief description of the card content.</p>
+            </div>
+        </div>
+        <div class="card">
+            <img src="/api/placeholder/400/200" alt="Card image" class="card-image">
+            <div class="card-content">
+                <h3 class="card-title">Card Title 3</h3>
+                <p class="card-description">This is a brief description of the card content.</p>
+            </div>
+        </div>
+        <!-- Add more cards as needed -->
+    </div>
+</body>
+</html>

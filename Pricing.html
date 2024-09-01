@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing Table</title>
+    <style>
+        .pricing-table {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .pricing-plan {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+        }
+        .plan-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .plan-price {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .plan-features {
+            list-style-type: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+        }
+        .plan-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .plan-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .plan-button:hover {
+            background-color: #45a049;
+        }
+        .featured {
+            transform: scale(1.05);
+            border: 2px solid #4CAF50;
+        }
+        @media (max-width: 768px) {
+            .pricing-plan {
+                width: 100%;
+            }
+            .featured {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="pricing-table" id="pricingTable">
+        <!-- Pricing plans will be dynamically inserted here -->
+    </div>
+
+    <script>
+        class PricingTable {
+            constructor(container) {
+                this.container = container;
+            }
+
+            addPlan(name, price, features, buttonText, isFeatured = false) {
+                const plan = document.createElement('div');
+                plan.className = `pricing-plan ${isFeatured ? 'featured' : ''}`;
+                plan.innerHTML = `
+                    <div class="plan-name">${name}</div>
+                    <div class="plan-price">$${price}</div>
+                    <ul class="plan-features">
+                        ${features.map(feature => `<li>${feature}</li>`).join('')}
+                    </ul>
+                    <button class="plan-button">${buttonText}</button>
+                `;
+                this.container.appendChild(plan);
+            }
+        }
+
+        // Usage example
+        const pricingTableElement = document.getElementById('pricingTable');
+        const pricingTable = new PricingTable(pricingTableElement);
+
+        pricingTable.addPlan('Basic', 9.99, [
+            '1 User',
+            '5GB Storage',
+            'Basic Support'
+        ], 'Choose Basic');
+
+        pricingTable.addPlan('Pro', 19.99, [
+            '5 Users',
+            '25GB Storage',
+            'Priority Support',
+            'Advanced Features'
+        ], 'Choose Pro', true);
+
+        pricingTable.addPlan('Enterprise', 49.99, [
+            'Unlimited Users',
+            '100GB Storage',
+            '24/7 Support',
+            'Custom Solutions'
+        ], 'Contact Us');
+    </script>
+</body>
+</html>

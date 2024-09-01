@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Team Members Grid</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .team-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .team-member {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        .team-member:hover {
+            transform: translateY(-5px);
+        }
+        .member-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        .member-info {
+            padding: 20px;
+            text-align: center;
+        }
+        .member-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .member-role {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .member-bio {
+            font-size: 14px;
+            color: #333;
+        }
+        @media (max-width: 768px) {
+            .team-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="team-container">
+        <div class="team-grid">
+            <div class="team-member">
+                <img src="/api/placeholder/250/250" alt="John Doe" class="member-image">
+                <div class="member-info">
+                    <h2 class="member-name">John Doe</h2>
+                    <p class="member-role">CEO</p>
+                    <p class="member-bio">John is a visionary leader with over 15 years of experience in the tech industry.</p>
+                </div>
+            </div>
+            <div class="team-member">
+                <img src="/api/placeholder/250/250" alt="Jane Smith" class="member-image">
+                <div class="member-info">
+                    <h2 class="member-name">Jane Smith</h2>
+                    <p class="member-role">CTO</p>
+                    <p class="member-bio">Jane is an innovative technologist passionate about creating cutting-edge solutions.</p>
+                </div>
+            </div>
+            <div class="team-member">
+                <img src="/api/placeholder/250/250" alt="Mike Johnson" class="member-image">
+                <div class="member-info">
+                    <h2 class="member-name">Mike Johnson</h2>
+                    <p class="member-role">Lead Designer</p>
+                    <p class="member-bio">Mike brings creativity and user-centric design to every project he touches.</p>
+                </div>
+            </div>
+            <div class="team-member">
+                <img src="/api/placeholder/250/250" alt="Sarah Lee" class="member-image">
+                <div class="member-info">
+                    <h2 class="member-name">Sarah Lee</h2>
+                    <p class="member-role">Marketing Director</p>
+                    <p class="member-bio">Sarah excels in creating compelling marketing strategies that drive growth.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // This script is optional and can be used to add interactivity
+        document.querySelectorAll('.team-member').forEach(member => {
+            member.addEventListener('click', () => {
+                alert(`You clicked on ${member.querySelector('.member-name').textContent}'s profile!`);
+            });
+        });
+    </script>
+</body>
+</html>

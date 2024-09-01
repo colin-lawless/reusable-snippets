@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive CTA Banner</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .cta-banner {
+            background-color: #0066cc;
+            color: white;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            max-width: 1000px;
+            margin: 20px auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .cta-title {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+        .cta-description {
+            font-size: 18px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        .cta-button {
+            background-color: #ffffff;
+            color: #0066cc;
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .cta-button:hover {
+            background-color: #e6f2ff;
+        }
+        @media (max-width: 768px) {
+            .cta-banner {
+                padding: 30px 20px;
+            }
+            .cta-title {
+                font-size: 24px;
+            }
+            .cta-description {
+                font-size: 16px;
+            }
+            .cta-button {
+                font-size: 16px;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cta-banner">
+        <h2 class="cta-title">Ready to Boost Your Productivity?</h2>
+        <p class="cta-description">Join thousands of satisfied customers and take your business to the next level with our powerful tools and features.</p>
+        <button class="cta-button">Get Started Now</button>
+    </div>
+
+    <script>
+        document.querySelector('.cta-button').addEventListener('click', function() {
+            alert('Thank you for your interest! Our team will contact you shortly to get you started.');
+        });
+    </script>
+</body>
+</html>
