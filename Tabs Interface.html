@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabs Interface</title>
+    <style>
+        .tabs-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            font-family: Arial, sans-serif;
+        }
+
+        .tabs-nav {
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tabs-nav li {
+            margin-right: 5px;
+        }
+
+        .tabs-nav button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #f4f4f4;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .tabs-nav button:hover {
+            background-color: #e4e4e4;
+        }
+
+        .tabs-nav button.active {
+            background-color: #ddd;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="tabs-container">
+        <ul class="tabs-nav" role="tablist">
+            <li role="presentation"><button id="tab1" role="tab" aria-selected="true" aria-controls="panel1">Tab 1</button></li>
+            <li role="presentation"><button id="tab2" role="tab" aria-selected="false" aria-controls="panel2">Tab 2</button></li>
+            <li role="presentation"><button id="tab3" role="tab" aria-selected="false" aria-controls="panel3">Tab 3</button></li>
+        </ul>
+
+        <div class="tab-content active" id="panel1" role="tabpanel" aria-labelledby="tab1">
+            <h2>Content for Tab 1</h2>
+            <p>This is the content for the first tab.</p>
+        </div>
+        <div class="tab-content" id="panel2" role="tabpanel" aria-labelledby="tab2">
+            <h2>Content for Tab 2</h2>
+            <p>This is the content for the second tab.</p>
+        </div>
+        <div class="tab-content" id="panel3" role="tabpanel" aria-labelledby="tab3">
+            <h2>Content for Tab 3</h2>
+            <p>This is the content for the third tab.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tabs-nav button');
+            const contents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    tabs.forEach(t => {
+                        t.classList.remove('active');
+                        t.setAttribute('aria-selected', 'false');
+                    });
+                    contents.forEach(c => c.classList.remove('active'));
+
+                    this.classList.add('active');
+                    this.setAttribute('aria-selected', 'true');
+                    document.getElementById(this.getAttribute('aria-controls')).classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

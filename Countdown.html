@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer</title>
+    <style>
+        .countdown {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            margin: 20px 0;
+        }
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 10px;
+        }
+        .countdown-value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        .countdown-label {
+            font-size: 0.8em;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div id="countdown" class="countdown">
+        <div class="countdown-item">
+            <span id="days" class="countdown-value">00</span>
+            <span class="countdown-label">Days</span>
+        </div>
+        <div class="countdown-item">
+            <span id="hours" class="countdown-value">00</span>
+            <span class="countdown-label">Hours</span>
+        </div>
+        <div class="countdown-item">
+            <span id="minutes" class="countdown-value">00</span>
+            <span class="countdown-label">Minutes</span>
+        </div>
+        <div class="countdown-item">
+            <span id="seconds" class="countdown-value">00</span>
+            <span class="countdown-label">Seconds</span>
+        </div>
+    </div>
+
+    <script>
+        class CountdownTimer {
+            constructor(targetDate, elements) {
+                this.targetDate = new Date(targetDate).getTime();
+                this.elements = elements;
+                this.interval = null;
+            }
+
+            start() {
+                this.update();
+                this.interval = setInterval(() => this.update(), 1000);
+            }
+
+            stop() {
+                if (this.interval) {
+                    clearInterval(this.interval);
+                }
+            }
+
+            update() {
+                const now = new Date().getTime();
+                const distance = this.targetDate - now;
+
+                if (distance < 0) {
+                    this.stop();
+                    Object.values(this.elements).forEach(el => el.textContent = '00');
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                this.elements.days.textContent = days.toString().padStart(2, '0');
+                this.elements.hours.textContent = hours.toString().padStart(2, '0');
+                this.elements.minutes.textContent = minutes.toString().padStart(2, '0');
+                this.elements.seconds.textContent = seconds.toString().padStart(2, '0');
+            }
+        }
+
+        // Usage example
+        const countdownElements = {
+            days: document.getElementById('days'),
+            hours: document.getElementById('hours'),
+            minutes: document.getElementById('minutes'),
+            seconds: document.getElementById('seconds')
+        };
+
+        // Set your target date here (YYYY-MM-DD HH:MM:SS)
+        const targetDate = '2023-12-31 23:59:59';
+        
+        const countdown = new CountdownTimer(targetDate, countdownElements);
+        countdown.start();
+
+        // To use in your own code, simply create a new instance with your target date:
+        // const myCountdown = new CountdownTimer('YYYY-MM-DD HH:MM:SS', countdownElements);
+        // myCountdown.start();
+    </script>
+</body>
+</html>

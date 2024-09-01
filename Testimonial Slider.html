@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testimonial Slider</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .testimonials-section {
+            padding: 4rem 5vw;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            background-color: #ffffff;
+        }
+        .testimonials-heading {
+            display: flex;
+            flex-direction: column;
+        }
+        .main-minor-heading {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        .main-major-heading {
+            font-size: 2rem;
+            color: #333;
+            margin-top: 0;
+        }
+        .testimonials-arrows {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .testimonials-arrow {
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+        .testimonials-arrow:hover {
+            background-color: #e0e0e0;
+        }
+        .testimonials-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+        .testimonial {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .testimonial.current {
+            opacity: 1;
+            position: relative;
+        }
+        .testimonial p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #333;
+        }
+        .testimonial-person {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .testimonial-person img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .testimonial-person-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .testimonial-person-info span:first-child {
+            font-weight: bold;
+        }
+        .testimonial-person-info span:last-child {
+            color: #666;
+        }
+        @media (max-width: 768px) {
+            .testimonials-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section id="testimonials-section" class="testimonials-section full-section">
+        <div class="testimonials-heading">
+            <h4 class="main-minor-heading">Testimonials</h4>
+            <h2 class="main-major-heading">What Our Clients Say</h2>
+            <div class="testimonials-arrows">
+                <div id="testimonial-previous" class="testimonials-arrow">&#8592;</div>
+                <div id="testimonial-next" class="testimonials-arrow">&#8594;</div>
+            </div>
+        </div>
+        <div class="testimonials-wrapper">
+            <div class="testimonial current">
+                <p>
+                    "This company has exceeded our expectations in every way. Their product/service has significantly improved our operations and boosted team morale. We've seen tangible results and are thrilled with the positive impact on our business."
+                </p>
+                <div class="testimonial-person">
+                    <img alt="John Doe - CEO, Company A" src="/api/placeholder/60/60" />
+                    <div class="testimonial-person-info">
+                        <span>John Doe - CEO</span>
+                        <span>Company A</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial">
+                <p>
+                    "We highly recommend this service for its exceptional quality and reliability. It has strengthened our brand identity and improved our team's efficiency. The impact on our business has been substantial, and we look forward to a long-term partnership."
+                </p>
+                <div class="testimonial-person">
+                    <img alt="Jane Smith - Director, Company B" src="/api/placeholder/60/60" />
+                    <div class="testimonial-person-info">
+                        <span>Jane Smith - Director</span>
+                        <span>Company B</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial">
+                <p>
+                    "Working with this team has been an absolute pleasure. Their attention to detail and commitment to quality is unparalleled. The product not only meets but exceeds our high standards. We're extremely satisfied and grateful for their outstanding work."
+                </p>
+                <div class="testimonial-person">
+                    <img alt="Alex Johnson - Founder, Company C" src="/api/placeholder/60/60" />
+                    <div class="testimonial-person-info">
+                        <span>Alex Johnson - Founder</span>
+                        <span>Company C</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const testimonials = document.querySelectorAll('.testimonial');
+            const prevButton = document.getElementById('testimonial-previous');
+            const nextButton = document.getElementById('testimonial-next');
+            let currentIndex = 0;
+
+            function showTestimonial(index) {
+                testimonials.forEach((testimonial, i) => {
+                    testimonial.classList.toggle('current', i === index);
+                });
+            }
+
+            function nextTestimonial() {
+                currentIndex = (currentIndex + 1) % testimonials.length;
+                showTestimonial(currentIndex);
+            }
+
+            function prevTestimonial() {
+                currentIndex = (currentIndex - 1 + testimonials.length) % testimonials.length;
+                showTestimonial(currentIndex);
+            }
+
+            nextButton.addEventListener('click', nextTestimonial);
+            prevButton.addEventListener('click', prevTestimonial);
+        });
+    </script>
+</body>
+</html>

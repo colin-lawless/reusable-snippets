@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Bar</title>
+    <style>
+        .progress-container {
+            width: 100%;
+            background-color: #f3f3f3;
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+        .progress-bar {
+            width: 0;
+            height: 30px;
+            background-color: #4CAF50;
+            border-radius: 20px;
+            transition: width 0.5s ease-in-out;
+        }
+        .progress-label {
+            margin-top: 10px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-container">
+        <div id="progressBar" class="progress-bar"></div>
+    </div>
+    <div id="progressLabel" class="progress-label">0%</div>
+
+    <script>
+        class ProgressBar {
+            constructor(element, labelElement) {
+                this.progressBar = element;
+                this.labelElement = labelElement;
+            }
+
+            update(percentage) {
+                const clampedPercentage = Math.min(100, Math.max(0, percentage));
+                this.progressBar.style.width = clampedPercentage + '%';
+                this.labelElement.textContent = Math.round(clampedPercentage) + '%';
+            }
+        }
+
+        // Usage example
+        const progressBarElement = document.getElementById('progressBar');
+        const labelElement = document.getElementById('progressLabel');
+        const progressBar = new ProgressBar(progressBarElement, labelElement);
+
+        // Example: Update progress every second (remove this in actual use)
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 10;
+            progressBar.update(progress);
+            if (progress > 100) {
+                clearInterval(interval);
+            }
+        }, 1000);
+
+        // To use in your own code, simply call:
+        // progressBar.update(yourPercentageValue);
+    </script>
+</body>
+</html>

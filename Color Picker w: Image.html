@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload and Color Picker with Centered Cursor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #imageContainer {
+            position: relative;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        #imageCanvas {
+            max-width: 100%;
+            cursor: none; /* Hide the default cursor */
+        }
+        #colorPicker {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            pointer-events: none; /* Ensures the cursor doesn't interfere with canvas events */
+            z-index: 1000;
+            transform: translate(-50%, -50%); /* Center the cursor on the pointer */
+        }
+        #colorPreview {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #000;
+            margin-top: 10px;
+        }
+        #colorInfo {
+            margin-top: 10px;
+        }
+        .color-value {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Upload and Color Picker</h1>
+    <input type="file" id="imageUpload" accept="image/*">
+    <div id="imageContainer">
+        <canvas id="imageCanvas"></canvas>
+        <svg id="colorPicker" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" stroke="white" stroke-width="3"/>
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="2" x2="12" y2="22"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+        </svg>
+    </div>
+    <div id="colorPreview"></div>
+    <div id="colorInfo"></div>
+
+    <script>
+        const imageUpload = document.getElementById('imageUpload');
+        const imageContainer = document.getElementById('imageContainer');
+        const imageCanvas = document.getElementById('imageCanvas');
+        const ctx = imageCanvas.getContext('2d');
+        const colorPicker = document.getElementById('colorPicker');
+        const colorPreview = document.getElementById('colorPreview');
+        const colorInfo = document.getElementById('colorInfo');
+
+        let originalImageWidth, originalImageHeight;
+
+        imageUpload.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    originalImageWidth = img.width;
+                    originalImageHeight = img.height;
+                    resizeCanvas();
+                    ctx.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
+                }
+                img.src = event.target.result;
+            }
+            reader.readAsDataURL(file);
+        });
+
+        function resizeCanvas() {
+            const containerWidth = imageContainer.clientWidth;
+            const scale = containerWidth / originalImageWidth;
+            imageCanvas.width = containerWidth;
+            imageCanvas.height = originalImageHeight * scale;
+        }
+
+        window.addEventListener('resize', function() {
+            if (originalImageWidth) {
+                resizeCanvas();
+                ctx.drawImage(imageCanvas, 0, 0, imageCanvas.width, imageCanvas.height);
+            }
+        });
+
+        imageContainer.addEventListener('mousemove', function(e) {
+            const rect = imageCanvas.getBoundingClientRect();
+            colorPicker.style.left = (e.clientX - rect.left) + 'px';
+            colorPicker.style.top = (e.clientY - rect.top) + 'px';
+        });
+
+        imageContainer.addEventListener('mouseleave', function() {
+            colorPicker.style.display = 'none';
+        });
+
+        imageContainer.addEventListener('mouseenter', function() {
+            colorPicker.style.display = 'block';
+        });
+
+        imageCanvas.addEventListener('click', function(e) {
+            const rect = imageCanvas.getBoundingClientRect();
+            const scaleX = originalImageWidth / rect.width;
+            const scaleY = originalImageHeight / rect.height;
+
+            const x = (e.clientX - rect.left) * scaleX;
+            const y = (e.clientY - rect.top) * scaleY;
+
+            const imageData = ctx.getImageData(x, y, 1, 1);
+            const pixel = imageData.data;
+
+            const rgba = `rgba(${pixel[0]}, ${pixel[1]}, ${pixel[2]}, ${pixel[3] / 255})`;
+            const hex = rgbToHex(pixel[0], pixel[1], pixel[2]);
+            const hsl = rgbToHsl(pixel[0], pixel[1], pixel[2]);
+
+            colorPreview.style.backgroundColor = rgba;
+            colorInfo.innerHTML = `
+                <div class="color-value">HEX: ${hex}</div>
+                <div class="color-value">RGB: ${rgba}</div>
+                <div class="color-value">HSL: hsl(${Math.round(hsl.h)}, ${Math.round(hsl.s)}%, ${Math.round(hsl.l)}%)</div>
+            `;
+        });
+
+        function rgbToHex(r, g, b) {
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        }
+
+        function rgbToHsl(r, g, b) {
+            r /= 255, g /= 255, b /= 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+
+            if (max === min) {
+                h = s = 0; // achromatic
+            } else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+
+            return {
+                h: h * 360,
+                s: s * 100,
+                l: l * 100
+            };
+        }
+    </script>
+</body>
+</html>

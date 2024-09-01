@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite Slider</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        .slider-section {
+            background-color: #f0f0f0; /* remove this */
+            padding: 3rem 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .slider-section h2 {
+            margin: 0 auto 3rem;
+            text-align: center;
+            font-size: 45px;
+            font-weight: 400;
+            color: #0C0C0D;
+        }
+        .slider-container {
+            display: inline-block;
+            white-space: nowrap;
+            animation: slide 30s linear infinite;
+        }
+        .slider-wrapper {
+            display: inline-block;
+            padding: 0;
+            margin: 0;
+        }
+        .slider-image {
+            display: inline-block;
+            width: 200px;
+            height: 100px;
+            margin: 0 30px;
+            vertical-align: middle;
+            background-color: #ddd; /* remove this */
+            border: 1px solid #999; /* remove this */
+        }
+        @keyframes slide {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(-50%);
+            }
+        }
+        .slider-container:hover {
+            animation-play-state: paused;
+        }
+        @media (max-width: 768px) {
+            .slider-section h2 {
+                font-size: 30px;
+            }
+            .slider-image {
+                width: 150px;
+                height: 75px;
+                margin: 0 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="slider-section" aria-label="Trusted by">
+        <h2>Trusted by</h2>
+        <div class="slider-container">
+            <div class="slider-wrapper">
+                <div class="slider-image" aria-label="Company 1"></div>
+                <div class="slider-image" aria-label="Company 2"></div>
+                <div class="slider-image" aria-label="Company 3"></div>
+                <div class="slider-image" aria-label="Company 4"></div>
+                <div class="slider-image" aria-label="Company 5"></div>
+                <div class="slider-image" aria-label="Company 6"></div>
+                <div class="slider-image" aria-label="Company 7"></div>
+            </div>
+            <div class="slider-wrapper">
+                <div class="slider-image" aria-label="Company 1"></div>
+                <div class="slider-image" aria-label="Company 2"></div>
+                <div class="slider-image" aria-label="Company 3"></div>
+                <div class="slider-image" aria-label="Company 4"></div>
+                <div class="slider-image" aria-label="Company 5"></div>
+                <div class="slider-image" aria-label="Company 6"></div>
+                <div class="slider-image" aria-label="Company 7"></div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slider = document.querySelector('.slider-container');
+            
+            function resetAnimation() {
+                slider.style.animation = 'none';
+                slider.offsetHeight; // Trigger reflow
+                slider.style.animation = null;
+            }
+
+            slider.addEventListener('animationiteration', resetAnimation);
+
+            slider.addEventListener('mouseenter', function() {
+                slider.style.animationPlayState = 'paused';
+            });
+
+            slider.addEventListener('mouseleave', function() {
+                slider.style.animationPlayState = 'running';
+            });
+        });
+    </script>
+</body>
+</html>

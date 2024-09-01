@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive FAQ Accordion</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .faq-item {
+            background-color: #fff;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .faq-question {
+            font-size: 18px;
+            font-weight: bold;
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-question::after {
+            content: '+';
+            font-size: 22px;
+            transition: transform 0.3s ease;
+        }
+        .faq-question.active::after {
+            transform: rotate(45deg);
+        }
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        .faq-answer.active {
+            padding: 15px 20px;
+            max-height: 1000px;
+        }
+        @media (max-width: 480px) {
+            .faq-question {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="faq-container">
+        <div class="faq-item">
+            <div class="faq-question">What is your return policy?</div>
+            <div class="faq-answer">Our return policy allows you to return items within 30 days of purchase, provided they are in their original condition. Please contact our customer service for more details.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">How long does shipping take?</div>
+            <div class="faq-answer">Shipping times vary depending on your location. Typically, domestic orders are delivered within 3-5 business days, while international orders may take 7-14 business days.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">Do you offer international shipping?</div>
+            <div class="faq-answer">Yes, we offer international shipping to most countries. Shipping costs and delivery times may vary depending on the destination.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">How can I track my order?</div>
+            <div class="faq-answer">Once your order is shipped, you will receive a tracking number via email. You can use this number to track your package on our website or the carrier's website.</div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                question.classList.toggle('active');
+                answer.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>

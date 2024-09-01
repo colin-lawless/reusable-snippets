@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag-to-Reorder List</title>
+    <style>
+        .draggable-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            max-width: 400px;
+        }
+        .draggable-item {
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 5px;
+            cursor: move;
+            transition: background-color 0.2s;
+        }
+        .draggable-item:hover {
+            background-color: #e8e8e8;
+        }
+        .draggable-item.dragging {
+            opacity: 0.5;
+            background-color: #c8ebfb;
+        }
+    </style>
+</head>
+<body>
+    <h2>Drag to Reorder List</h2>
+    <ul id="draggableList" class="draggable-list">
+        <li class="draggable-item" draggable="true">Item 1</li>
+        <li class="draggable-item" draggable="true">Item 2</li>
+        <li class="draggable-item" draggable="true">Item 3</li>
+        <li class="draggable-item" draggable="true">Item 4</li>
+        <li class="draggable-item" draggable="true">Item 5</li>
+    </ul>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const list = document.getElementById('draggableList');
+            let draggedItem = null;
+
+            list.addEventListener('dragstart', function(e) {
+                draggedItem = e.target;
+                setTimeout(() => {
+                    e.target.classList.add('dragging');
+                }, 0);
+            });
+
+            list.addEventListener('dragend', function(e) {
+                e.target.classList.remove('dragging');
+            });
+
+            list.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                const afterElement = getDragAfterElement(list, e.clientY);
+                const currentItem = draggedItem;
+                if (afterElement == null) {
+                    list.appendChild(draggedItem);
+                } else {
+                    list.insertBefore(draggedItem, afterElement);
+                }
+            });
+
+            function getDragAfterElement(container, y) {
+                const draggableElements = [...container.querySelectorAll('.draggable-item:not(.dragging)')];
+                
+                return draggableElements.reduce((closest, child) => {
+                    const box = child.getBoundingClientRect();
+                    const offset = y - box.top - box.height / 2;
+                    if (offset < 0 && offset > closest.offset) {
+                        return { offset: offset, element: child };
+                    } else {
+                        return closest;
+                    }
+                }, { offset: Number.NEGATIVE_INFINITY }).element;
+            }
+        });
+    </script>
+</body>
+</html>

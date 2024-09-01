@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Color Picker</title>
+    <style>
+        .color-picker {
+            width: 300px;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            font-family: Arial, sans-serif;
+        }
+        .color-display {
+            width: 100%;
+            height: 40px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+        .color-area {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .hue-spectrum {
+            width: 30px;
+            height: 200px;
+            cursor: crosshair;
+        }
+        .saturation-value-spectrum {
+            width: 200px;
+            height: 200px;
+            cursor: crosshair;
+            margin-right: 10px;
+        }
+        .color-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .color-input {
+            display: flex;
+            align-items: center;
+        }
+        .color-input label {
+            width: 50px;
+        }
+        .color-input input {
+            flex-grow: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="color-picker">
+        <div id="colorDisplay" class="color-display"></div>
+        <div class="color-area">
+            <canvas id="saturationValue" class="saturation-value-spectrum" width="200" height="200"></canvas>
+            <canvas id="hueSpectrum" class="hue-spectrum" width="30" height="200"></canvas>
+        </div>
+        <div class="color-inputs">
+            <div class="color-input">
+                <label for="hexInput">HEX:</label>
+                <input type="text" id="hexInput" maxlength="7" placeholder="#000000">
+            </div>
+            <div class="color-input">
+                <label for="rgbInput">RGB:</label>
+                <input type="text" id="rgbInput" placeholder="0, 0, 0">
+            </div>
+            <div class="color-input">
+                <label for="hslInput">HSL:</label>
+                <input type="text" id="hslInput" placeholder="0, 0%, 0%">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const colorDisplay = document.getElementById('colorDisplay');
+            const hexInput = document.getElementById('hexInput');
+            const rgbInput = document.getElementById('rgbInput');
+            const hslInput = document.getElementById('hslInput');
+            const saturationValue = document.getElementById('saturationValue');
+            const hueSpectrum = document.getElementById('hueSpectrum');
+
+            let currentHue = 0;
+            let currentSaturation = 100;
+            let currentValue = 100;
+
+            function updateColor() {
+                const rgb = hsvToRgb(currentHue, currentSaturation, currentValue);
+                const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+                const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+
+                colorDisplay.style.backgroundColor = hex;
+                hexInput.value = hex;
+                rgbInput.value = `${rgb.r}, ${rgb.g}, ${rgb.b}`;
+                hslInput.value = `${Math.round(hsl.h)}, ${Math.round(hsl.s)}%, ${Math.round(hsl.l)}%`;
+
+                drawSaturationValue();
+            }
+
+            function drawHueSpectrum() {
+                const ctx = hueSpectrum.getContext('2d');
+                const gradient = ctx.createLinearGradient(0, 0, 0, hueSpectrum.height);
+                for(let i = 0; i <= 360; i+=30) {
+                    gradient.addColorStop(i/360, `hsl(${i}, 100%, 50%)`);
+                }
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, hueSpectrum.width, hueSpectrum.height);
+            }
+
+            function drawSaturationValue() {
+                const ctx = saturationValue.getContext('2d');
+                ctx.fillStyle = `hsl(${currentHue}, 100%, 50%)`;
+                ctx.fillRect(0, 0, saturationValue.width, saturationValue.height);
+
+                const gradientWhite = ctx.createLinearGradient(0, 0, saturationValue.width, 0);
+                gradientWhite.addColorStop(0, "rgba(255,255,255,1)");
+                gradientWhite.addColorStop(1, "rgba(255,255,255,0)");
+                ctx.fillStyle = gradientWhite;
+                ctx.fillRect(0, 0, saturationValue.width, saturationValue.height);
+
+                const gradientBlack = ctx.createLinearGradient(0, 0, 0, saturationValue.height);
+                gradientBlack.addColorStop(0, "rgba(0,0,0,0)");
+                gradientBlack.addColorStop(1, "rgba(0,0,0,1)");
+                ctx.fillStyle = gradientBlack;
+                ctx.fillRect(0, 0, saturationValue.width, saturationValue.height);
+            }
+
+            hueSpectrum.addEventListener('mousedown', function(e) {
+                const updateHue = function(e) {
+                    const rect = hueSpectrum.getBoundingClientRect();
+                    const y = e.clientY - rect.top;
+                    currentHue = (y / hueSpectrum.height) * 360;
+                    updateColor();
+                };
+                updateHue(e);
+                document.addEventListener('mousemove', updateHue);
+                document.addEventListener('mouseup', function() {
+                    document.removeEventListener('mousemove', updateHue);
+                }, { once: true });
+            });
+
+            saturationValue.addEventListener('mousedown', function(e) {
+                const updateSaturationValue = function(e) {
+                    const rect = saturationValue.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    currentSaturation = (x / saturationValue.width) * 100;
+                    currentValue = 100 - (y / saturationValue.height) * 100;
+                    updateColor();
+                };
+                updateSaturationValue(e);
+                document.addEventListener('mousemove', updateSaturationValue);
+                document.addEventListener('mouseup', function() {
+                    document.removeEventListener('mousemove', updateSaturationValue);
+                }, { once: true });
+            });
+
+            function hsvToRgb(h, s, v) {
+                h /= 360;
+                s /= 100;
+                v /= 100;
+                let r, g, b;
+                const i = Math.floor(h * 6);
+                const f = h * 6 - i;
+                const p = v * (1 - s);
+                const q = v * (1 - f * s);
+                const t = v * (1 - (1 - f) * s);
+                switch (i % 6) {
+                    case 0: r = v, g = t, b = p; break;
+                    case 1: r = q, g = v, b = p; break;
+                    case 2: r = p, g = v, b = t; break;
+                    case 3: r = p, g = q, b = v; break;
+                    case 4: r = t, g = p, b = v; break;
+                    case 5: r = v, g = p, b = q; break;
+                }
+                return {
+                    r: Math.round(r * 255),
+                    g: Math.round(g * 255),
+                    b: Math.round(b * 255)
+                };
+            }
+
+            function rgbToHex(r, g, b) {
+                return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+            }
+
+            function rgbToHsl(r, g, b) {
+                r /= 255, g /= 255, b /= 255;
+                const max = Math.max(r, g, b), min = Math.min(r, g, b);
+                let h, s, l = (max + min) / 2;
+
+                if (max === min) {
+                    h = s = 0;
+                } else {
+                    const d = max - min;
+                    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                    switch (max) {
+                        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                        case g: h = (b - r) / d + 2; break;
+                        case b: h = (r - g) / d + 4; break;
+                    }
+                    h /= 6;
+                }
+
+                return { h: h * 360, s: s * 100, l: l * 100 };
+            }
+
+            // Initialize
+            drawHueSpectrum();
+            updateColor();
+        });
+    </script>
+</body>
+</html>

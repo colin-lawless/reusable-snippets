@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced File Upload</title>
+    <style>
+        .file-upload-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            font-family: Arial, sans-serif;
+        }
+        .file-upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .file-list {
+            margin-top: 20px;
+            padding: 0;
+            list-style-type: none;
+        }
+        .file-list li {
+            background-color: #f4f4f4;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .file-list li button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .add-more-files {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            border: none;
+        }
+        .upload-limits {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+        .upload-limits input {
+            width: 60px;
+            margin-right: 10px;
+        }
+        .error-message {
+            color: #ff4d4d;
+            background-color: #ffeeee;
+            border: 1px solid #ff4d4d;
+            border-radius: 4px;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 14px;
+            display: none; /* Hide by default */
+        }
+    </style>
+</head>
+<body>
+    <div class="file-upload-container">
+        <div class="file-upload-area" id="dropArea">
+            <p>Drag & Drop files here or click to select</p>
+            <input type="file" id="fileInput" multiple style="display: none;">
+        </div>
+        <ul class="file-list" id="fileList"></ul>
+        <button class="add-more-files" id="addMoreFiles" style="display: none;">+</button>
+        <div class="upload-limits">
+            <label>
+                Max files: 
+                <input type="number" id="maxFiles" value="5" min="1">
+            </label>
+            <label>
+                Max size (MB): 
+                <input type="number" id="maxSize" value="10" min="1">
+            </label>
+        </div>
+        <div id="errorMessage" class="error-message"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropArea = document.getElementById('dropArea');
+            const fileInput = document.getElementById('fileInput');
+            const fileList = document.getElementById('fileList');
+            const addMoreFiles = document.getElementById('addMoreFiles');
+            const maxFilesInput = document.getElementById('maxFiles');
+            const maxSizeInput = document.getElementById('maxSize');
+            const errorMessage = document.getElementById('errorMessage');
+
+            let totalSize = 0;
+
+            dropArea.addEventListener('click', () => fileInput.click());
+            addMoreFiles.addEventListener('click', () => fileInput.click());
+
+            dropArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropArea.style.backgroundColor = '#f0f0f0';
+            });
+
+            dropArea.addEventListener('dragleave', () => {
+                dropArea.style.backgroundColor = '';
+            });
+
+            dropArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropArea.style.backgroundColor = '';
+                handleFiles(e.dataTransfer.files);
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files);
+            });
+
+            function handleFiles(files) {
+                const maxFiles = parseInt(maxFilesInput.value);
+                const maxSize = parseInt(maxSizeInput.value) * 1024 * 1024; // Convert MB to bytes
+
+                Array.from(files).forEach(file => {
+                    if (fileList.children.length >= maxFiles) {
+                        showError(`You can only upload a maximum of ${maxFiles} files.`);
+                        return;
+                    }
+
+                    if (totalSize + file.size > maxSize) {
+                        showError(`Adding this file would exceed the maximum total size of ${maxSize / (1024 * 1024)} MB.`);
+                        return;
+                    }
+
+                    addFileToList(file);
+                    totalSize += file.size;
+                });
+
+                updateUploadArea();
+            }
+
+            function addFileToList(file) {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${file.name} (${formatFileSize(file.size)})</span>
+                    <button class="remove-file">Remove</button>
+                `;
+                li.querySelector('.remove-file').addEventListener('click', function() {
+                    li.remove();
+                    totalSize -= file.size;
+                    updateUploadArea();
+                });
+                fileList.appendChild(li);
+                console.log(`File added: ${file.name}`);
+            }
+
+            function updateUploadArea() {
+                const maxFiles = parseInt(maxFilesInput.value);
+                if (fileList.children.length > 0) {
+                    dropArea.style.display = 'none';
+                    if (fileList.children.length < maxFiles) {
+                        addMoreFiles.style.display = 'inline-block';
+                    } else {
+                        addMoreFiles.style.display = 'none';
+                    }
+                } else {
+                    dropArea.style.display = 'block';
+                    addMoreFiles.style.display = 'none';
+                }
+            }
+
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block'; // Make the error message visible
+                console.error(message); // Keep console logging for debugging
+                
+                // Automatically hide the error message after 5 seconds
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                    errorMessage.textContent = '';
+                }, 5000);
+            }
+
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            // Update UI when max files or max size changes
+            maxFilesInput.addEventListener('change', updateUploadArea);
+            maxSizeInput.addEventListener('change', updateUploadArea);
+
+            // Ensure file input is cleared after each selection
+            fileInput.addEventListener('click', function() {
+                this.value = null;
+            });
+        });
+    </script>
+</body>
+</html>
