@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing Table</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .pricing-table {
+            display: flex;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .pricing-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .pricing-column:not(:last-child) {
+            border-right: 1px solid #e0e0e0;
+        }
+        .pricing-cell {
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid #e0e0e0;
+            height: 70px; /* Set a consistent height for all cells */
+        }
+        .pricing-column:first-child .pricing-cell {
+            justify-content: flex-start;
+            font-weight: bold;
+            background-color: #f9f9f9;
+            padding-left: 30px;
+        }
+        .pricing-header {
+            background-color: #0066cc;
+            color: white;
+            font-weight: bold;
+            padding: 30px 20px;
+            height: 120px; /* Set a consistent height for the header */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .pricing-column:first-child .pricing-header {
+            background-color: white;
+            color: black;
+            align-items: flex-start;
+            padding-left: 30px;
+        }
+        .plan-name {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .plan-price {
+            font-size: 18px;
+        }
+        .check, .cross {
+            font-size: 24px;
+        }
+        .check {
+            color: #4CAF50;
+        }
+        .cross {
+            color: #F44336;
+        }
+        .cta-button {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 90%;
+        }
+        .cta-button:hover {
+            background-color: #0052a3;
+        }
+        @media (max-width: 768px) {
+            .pricing-table {
+                flex-direction: column;
+            }
+            .pricing-column:not(:last-child) {
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+            }
+            .pricing-column:first-child {
+                display: none;
+            }
+            .pricing-cell {
+                flex-direction: column;
+                text-align: center;
+                padding: 15px;
+                height: auto;
+            }
+            .pricing-cell::before {
+                content: attr(data-feature);
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+            .pricing-header {
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="pricing-table">
+        <div class="pricing-column">
+            <div class="pricing-header">Features</div>
+            <div class="pricing-cell">Users</div>
+            <div class="pricing-cell">Storage</div>
+            <div class="pricing-cell">24/7 Support</div>
+            <div class="pricing-cell">API Access</div>
+            <div class="pricing-cell">Custom Domain</div>
+            <div class="pricing-cell"></div>
+        </div>
+        <div class="pricing-column">
+            <div class="pricing-header">
+                <div class="plan-name">Basic</div>
+                <div class="plan-price">$9.99/mo</div>
+            </div>
+            <div class="pricing-cell" data-feature="Users">1 User</div>
+            <div class="pricing-cell" data-feature="Storage">5GB</div>
+            <div class="pricing-cell" data-feature="24/7 Support"><span class="cross">✕</span></div>
+            <div class="pricing-cell" data-feature="API Access"><span class="cross">✕</span></div>
+            <div class="pricing-cell" data-feature="Custom Domain"><span class="cross">✕</span></div>
+            <div class="pricing-cell"><button class="cta-button">Choose Basic</button></div>
+        </div>
+        <div class="pricing-column">
+            <div class="pricing-header">
+                <div class="plan-name">Pro</div>
+                <div class="plan-price">$19.99/mo</div>
+            </div>
+            <div class="pricing-cell" data-feature="Users">5 Users</div>
+            <div class="pricing-cell" data-feature="Storage">50GB</div>
+            <div class="pricing-cell" data-feature="24/7 Support"><span class="cross">✕</span></div>
+            <div class="pricing-cell" data-feature="API Access"><span class="check">✓</span></div>
+            <div class="pricing-cell" data-feature="Custom Domain"><span class="check">✓</span></div>
+            <div class="pricing-cell"><button class="cta-button">Choose Pro</button></div>
+        </div>
+        <div class="pricing-column">
+            <div class="pricing-header">
+                <div class="plan-name">Enterprise</div>
+                <div class="plan-price">$39.99/mo</div>
+            </div>
+            <div class="pricing-cell" data-feature="Users">Unlimited</div>
+            <div class="pricing-cell" data-feature="Storage">500GB</div>
+            <div class="pricing-cell" data-feature="24/7 Support"><span class="check">✓</span></div>
+            <div class="pricing-cell" data-feature="API Access"><span class="check">✓</span></div>
+            <div class="pricing-cell" data-feature="Custom Domain"><span class="check">✓</span></div>
+            <div class="pricing-cell"><button class="cta-button">Choose Enterprise</button></div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.cta-button').forEach(button => {
+            button.addEventListener('click', function() {
+                alert('Thank you for choosing our ' + this.textContent.split(' ')[1] + ' plan!');
+            });
+        });
+    </script>
+</body>
+</html>
