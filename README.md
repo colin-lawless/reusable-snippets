@@ -1,7 +1,7 @@
 # Reusable HTML Snippets
 
 
-These HTML snippets are designed to be easy to use and integrate into your projects..
+These HTML snippets are designed to be easy to use and integrate into your projects.
 
 ## Usage
 
